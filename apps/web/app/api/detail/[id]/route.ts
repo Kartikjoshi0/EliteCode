@@ -10,6 +10,9 @@ export async function GET(res: NextResponse,{params}: {params: {id: string}}){
         const problem=await prisma.problem.findUnique({
             where: {
                 id: Number(id)
+            },
+            include: {
+                TestCases: true
             }
         })
         if(!problem){

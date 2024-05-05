@@ -29,6 +29,15 @@ model Problem {
   difficulty  Difficulty
   createdAt   DateTime     @default(now())
   submissions Submission[]
+  TestCases   TestCases[]
+}
+
+model TestCases {
+  id             Int      @id @default(autoincrement())
+  expectedOutput String
+  problem        Problem  @relation(fields: [problemId], references: [id])
+  problemId      Int
+  inputs         String[]
 }
 
 enum Difficulty {
