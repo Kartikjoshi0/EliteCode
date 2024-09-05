@@ -12,6 +12,8 @@ const options = {
 try {
 	const response = await axios.request(options);
 	console.log('this is token',response.data);
+  console.log(response.data);
+  
     return response.data;
 } catch (error) {
 	console.error(error);

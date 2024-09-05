@@ -1,10 +1,10 @@
-import { NextResponse } from "next/server";
+import { NextResponse,NextRequest } from "next/server";
 import { PrismaClient } from "@prisma/client";
 
 const prisma=new PrismaClient()
 
-
-export async function GET(res: NextResponse,{params}: {params: {id: string}}){
+// @ts-ignore
+export async function GET(request: NextRequest,{params}: {params: {id: string}}){
     const id=params.id
     try {
         const problem=await prisma.problem.findUnique({
@@ -16,13 +16,14 @@ export async function GET(res: NextResponse,{params}: {params: {id: string}}){
             }
         })
         if(!problem){
-            NextResponse.json({
+            return NextResponse.json({
                 msg: "no id matched"
             })
         }
         return NextResponse.json(problem)
     } catch (error) {
         console.log('this is error',error);
+        return NextResponse.json({ msg: 'Internal server error' }, { status: 500 });
         
     }
 }

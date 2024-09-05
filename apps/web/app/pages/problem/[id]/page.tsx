@@ -1,11 +1,18 @@
 'use client'
 import Editor from "@monaco-editor/react";
 import { Difficulty, TestCases } from "@prisma/client";
-import axios from "axios";
-import { METHODS } from "http";
-import React, { useRef } from "react";
+import { Button } from '../../../../../../packages/ui/src/Button'
+import { Choose } from '../../../../../../packages/ui/src/Choose'
+import React from "react";
 import { useEffect ,useState} from "react";
 import { getResult, submitCode } from "../../../actions/submission";
+import { TestCasse } from "../../../../../../packages/ui/src/TestCase";
+import { getLanguages } from "../../../actions/getLangs";
+import {useRecoilValue } from "recoil";
+import {LanguageId} from '../../../../../../packages/atom/code'
+import {ResultBox } from "@repo/ui/resutlBox";
+
+
 interface Problem {
   id: number;
   title: string;
@@ -15,15 +22,19 @@ interface Problem {
   TestCases: TestCases[];
 }
 
-
 export default function Page({params}: {params: {id: string}}) {
   const id= params.id
   const [detail,setDetail]=useState<Problem>()
   const [code, setCode] = useState<string>("");
   const [output,setOutput]=useState('');
+  const [lang,setLang]=useState<any[]>([])
+  const langauageId=useRecoilValue(LanguageId)
   useEffect(() => {
     const fetchProblem = async () => {
       try {
+        const languages= await getLanguages();
+        console.log(languages);
+        setLang(languages)
         const response = await fetch(`/api/detail/${id}`);
         if (!response.ok) {
           throw new Error('Failed to fetch problems');
@@ -41,7 +52,7 @@ export default function Page({params}: {params: {id: string}}) {
   }, []);
   async function handleSubmit() { 
     try {
-      const result=await submitCode(code, '52',detail?.TestCases)
+      const result=await submitCode(code, langauageId, detail?.TestCases || [])
       console.log(result);
       const finalresult=await getResult(result);
       setOutput(finalresult?.msg);
@@ -53,29 +64,34 @@ export default function Page({params}: {params: {id: string}}) {
     
   }
   
-  
-
   if (!detail) {
     return <div>Loading...</div>;
   }
   
+  
   return (
       <div className="grid grid-cols-2 gap-2">
-        <div>
-          <h1 >{detail.title}</h1>
-          <p className="text-blue-500">{detail.description}</p>
-          <h2>Test Cases:</h2>
+        <div className=" p-5 border-solid border-2 rounded border-gray-300 shadow-lg shadow-gray-500">
+          <div className="">
+            <div className="text-xl font-bold flex gap-2">
+              <div>{`${detail.id}.`}</div>
+              <div>{detail.title}</div>
+            </div>
+            <div className={`bg-gray-100 w-fit rounded  text-yellow-500 `}>{detail.difficulty}</div>
+            <div className="">{detail.description}</div >
+          </div>
         <ul>
           {detail.TestCases.map((testCase, index) => (
-            <li key={index}>
-              <p>Input: {testCase.inputs.join(", ")}</p>
-              <p>Expected Output: {testCase.expectedOutput}</p>
-            </li>
+            <TestCasse key={index}  input={testCase.inputs} index={index} expectedOutput={testCase.expectedOutput}  />
           ))}
         </ul>
         </div>
         <div>
-        <button onClick={handleSubmit}>Submit</button>
+        <div className="flex mx-3 mt-1 gap-20 ">
+          <Choose languages={lang}/>
+          <Button onClick={handleSubmit}>Run</Button>
+          <div className="z-50"><ResultBox output={output} /></div>
+        </div>
         <Editor
           height="90vh"
           defaultLanguage="javascript"
@@ -84,12 +100,9 @@ export default function Page({params}: {params: {id: string}}) {
           onChange={(value) => setCode(value || "")}
           theme="vs-dark"
         />
-        </div>
-        {output== ''? 
-        <div>Submit your code </div>:
-        <div>your code is :{output} </div>
-      }
+      </div>
+    </div>
 
-      </ div>
+     
   );
 }

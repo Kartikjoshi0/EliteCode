@@ -47,6 +47,13 @@ async function main(){
           // Add more test cases as needed
         ]
       });
+      const testCasesForProblem1= await prisma.testCases.createMany({
+        data: [
+          { expectedOutput: '3', problemId: problem1.id, inputs: ["1", "2"] },
+          { expectedOutput: '5', problemId: problem1.id, inputs: ["2", "3"] },
+          // Add more test cases as needed
+        ]
+      });
       console.log('Data seeded successfully!');
 }
 main()
