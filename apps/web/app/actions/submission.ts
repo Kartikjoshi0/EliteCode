@@ -38,7 +38,7 @@ export async function submitCode(code: string, language_id: string,testCases: Te
       
       try {
           const response = await axios.request(options);
-          // console.log('this is inputs',{msg: testCases[0].inputs.join(' ')});
+          console.log('this is inputs',{msg: testCases[0].inputs.join(' ')});
           if(response){
             console.log('this is ur code ',code);
             console.log('ok response is  ',response);
@@ -50,13 +50,13 @@ export async function submitCode(code: string, language_id: string,testCases: Te
             console.log("no response avaliable ");
             
           }
-          // console.log('updaetd token ',response.data.map(token => token.token).join(','));
-          const token=response.data.map((token: any) => token.token).join(',')
+          console.log('updaetd token ',response.data.map(token => token.token).join(','));
+          const token=response.data.map(token => token.token).join(',')
           
           return token
            
       } catch (error) {
-          console.log('this is error bc',error);
+          console.log('this is error ',error);
       }
 }
 export async function getResult(token: string){
@@ -95,4 +95,4 @@ export async function getResult(token: string){
       } catch (error) {
           console.error(error);
       }
-}
+} 

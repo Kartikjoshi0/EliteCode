@@ -1,28 +1,32 @@
 'use client'
-import { Button } from "./Button"
-
-interface AppbarProps{
-    user?: {
-        name?: string | null
-    },
-    onSignin: any,
-    onSignout: any,
-    bgcolor: string
-}
-
-export const Appbar=({
-    user,
-    onSignin,
-    onSignout,
-    bgcolor
-}: AppbarProps)=>{
-    return <div className={`fixed  top-0 left-0 right-0  flex justify-between border-b px-4 ${bgcolor}` }>
-    <div className="text-lg text-white flex justify-center items-center">
-        <div className="text-white">Elite</div>
-        <div className="text-green-500">Code</div>
-    </div>
-    <div className="flex  justify-center pt-2">
-        <Button onClick={user ? onSignout : onSignin}>{user ? "Logout" : "Login"}</Button>
-    </div>
-</div>
+import {motion} from 'framer-motion'
+import { signIn } from "next-auth/react";
+import { useSession } from "next-auth/react"
+import { Button } from './Button';
+export const Appbar= ()=>{
+    const session=useSession();
+    const user=session.data?.user
+    return (
+        <nav className="sticky mx-auto top-0 z-50 flex items-center shadow-neutral-600/5 py-6 w-3/4 ">
+            <motion.div
+              initial={{y:-20,opacity:0}}
+              animate={{y:0,opacity:1}}
+              transition={{duration: 0.5, ease: 'easeInOut', type:"spring",  damping: 10 }}
+              className='flex w-full justify-between bg-background-primary/30 shardow-lg backdrop-blur-lg p-6  border border-white border-2 rounded-2xl'
+            >
+            <span className="text-lg md:text-2xl font-bold tracking-tight text-white hidden md:block" >Elite-Code</span>
+            {!user ? (
+            <Button
+              onClick={async () => {
+                await signIn();
+              }}
+            >
+              Login
+            </Button>
+          ) : (
+            ""
+          )}
+            </motion.div>
+        </nav>
+    )
 }

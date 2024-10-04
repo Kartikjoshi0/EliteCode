@@ -15,5 +15,8 @@
     ".next/types/**/*.ts",
     "../../packages/ui/src/Appbar.tsx"
 , "../../packages/ui/src/ProblemCard.tsx", "../../packages/ui/src/TestCase.tsx"  ],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules"],
+  "paths": {
+      "@ui/*": ["packages/ui/src/*"]
+    }
 }
