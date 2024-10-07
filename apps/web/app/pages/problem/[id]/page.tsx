@@ -95,7 +95,7 @@ export default function Page({params}: {params: {id: string}}) {
         <Editor
           height="90vh"
           defaultLanguage="javascript"
-          defaultValue="// some comment"
+          defaultValue="//start from here"
           value={code}
           onChange={(value) => setCode(value || "")}
           theme="vs-dark"

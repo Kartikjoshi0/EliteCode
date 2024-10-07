@@ -30,7 +30,7 @@ export const Choose = ({ languages }: ChooseProps) => {
     );
   } else {
     return (
-      <div className="absolute z-50 bg-white">
+      <div className="absolute z-50 bg-grey-900">
         <button onClick={handleClick}>{LanguageName}</button>
         <div className="grid grid-cols-3 gap-2">
           {languages.map((lang, index) => (
@@ -41,7 +41,7 @@ export const Choose = ({ languages }: ChooseProps) => {
                 setLangaugeId(lang.id);
                 setVisible(!visible);
               }}
-              className="absolute z-100 text-black cursor-pointer"
+              className="absolute z-100 text-white cursor-pointer"
             >
               {lang.name}
             </button>

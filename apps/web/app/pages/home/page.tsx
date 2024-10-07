@@ -1,8 +1,6 @@
 "use client"
 import { useEffect, useState } from "react";
 import { Difficulty } from "@prisma/client";
-import { signIn, signOut,useSession } from "next-auth/react";
-
 import { ProblemCard } from "../../../../../packages/ui/src/ProblemCard";
 import { Appbar } from "../../../../../packages/ui/src/Appbar";
 
@@ -33,10 +31,10 @@ export default function Page() {
     fetchProblems();
   }, []);
 
-  const session=useSession();
+ 
 
   return (
-    <div className="flex flex-col m-3 bg-background-primary h-screen w-full overflow-hidden overflow-y-hidden">
+    <div className="flex flex-col  bg-background-primary h-screen w-full overflow-hidden overflow-y-hidden">
        <div>
       <Appbar/>
        </div>

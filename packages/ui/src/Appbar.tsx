@@ -1,6 +1,6 @@
 'use client'
 import {motion} from 'framer-motion'
-import { signIn } from "next-auth/react";
+import { signIn, signOut } from "next-auth/react";
 import { useSession } from "next-auth/react"
 import { Button } from './Button';
 export const Appbar= ()=>{
@@ -24,7 +24,13 @@ export const Appbar= ()=>{
               Login
             </Button>
           ) : (
-            ""
+            <Button
+              onClick={async () => {
+                await signOut();
+              }}
+            >
+              Logout
+            </Button>
           )}
             </motion.div>
         </nav>
